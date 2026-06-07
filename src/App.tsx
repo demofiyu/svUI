@@ -27,6 +27,23 @@ import './index.css';
 // Import local assets (Vite will load these)
 import weddingInviteBg from './assets/wedding_invite_bg.png';
 import weddingCouple from './assets/wedding_couple.png';
+import partyInviteBg from './assets/party_invite_bg.png';
+import poojaInviteBg from './assets/pooja_invite_bg.png';
+import pathInviteBg from './assets/path_invite_bg.png';
+import publicInviteBg from './assets/public_invite_bg.png';
+import generalInviteBg from './assets/general_invite_bg.png';
+
+const getBackgroundImage = (type: string) => {
+  switch (type) {
+    case 'wedding': return weddingInviteBg;
+    case 'party': return partyInviteBg;
+    case 'pooja': return poojaInviteBg;
+    case 'path': return pathInviteBg;
+    case 'public': return publicInviteBg;
+    case 'general': return generalInviteBg;
+    default: return generalInviteBg;
+  }
+};
 
 interface EventTimeline {
   id: string;
@@ -1387,9 +1404,7 @@ function App() {
                 <div 
                   className="invite-hero"
                   style={{
-                    backgroundImage: activeInvite.type === 'wedding'
-                      ? `url(${weddingInviteBg})`
-                      : `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)), url(${weddingCouple})`,
+                    backgroundImage: `url(${getBackgroundImage(activeInvite.type)})`,
                     backgroundSize: activeInvite.type === 'wedding' ? '100% 100%' : 'cover'
                   }}
                 >
@@ -1721,9 +1736,7 @@ function App() {
             <div 
               className="invite-hero"
               style={{
-                backgroundImage: activeInvite.type === 'wedding'
-                  ? `url(${weddingInviteBg})`
-                  : `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)), url(${weddingCouple})`,
+                backgroundImage: `url(${getBackgroundImage(activeInvite.type)})`,
                 backgroundSize: activeInvite.type === 'wedding' ? '100% 100%' : 'cover'
               }}
             >
