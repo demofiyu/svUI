@@ -45,6 +45,60 @@ const getBackgroundImage = (type: string) => {
   }
 };
 
+const getHeroStyles = (type: string) => {
+  switch (type) {
+    case 'wedding':
+      return {
+        label: { color: 'var(--secondary)' },
+        title: {},
+        conj: { color: 'var(--secondary)' },
+        sub: { color: 'var(--primary)' },
+        date: { color: 'var(--primary)' }
+      };
+    case 'party':
+      return {
+        label: { color: 'var(--accent)' },
+        title: { color: '#fff' },
+        conj: { color: 'var(--secondary)' },
+        sub: { color: '#fff' },
+        date: { color: '#fff', borderColor: 'var(--accent)' }
+      };
+    case 'pooja':
+      return {
+        label: { color: 'var(--secondary)' },
+        title: { color: 'var(--primary)' },
+        conj: { color: 'var(--secondary)' },
+        sub: { color: 'var(--primary)' },
+        date: { color: 'var(--primary)', borderColor: 'var(--secondary)' }
+      };
+    case 'path':
+      return {
+        label: { color: 'var(--secondary)' },
+        title: { color: 'var(--primary)' },
+        conj: { color: 'var(--secondary)' },
+        sub: { color: 'var(--primary)' },
+        date: { color: 'var(--primary)', borderColor: 'var(--secondary)' }
+      };
+    case 'public':
+      return {
+        label: { color: 'var(--accent)' },
+        title: { color: '#fff' },
+        conj: { color: '#fff' },
+        sub: { color: '#fff' },
+        date: { color: '#fff', borderColor: 'var(--accent)' }
+      };
+    case 'general':
+    default:
+      return {
+        label: { color: 'var(--secondary)' },
+        title: { color: 'var(--primary)' },
+        conj: { color: 'var(--secondary)' },
+        sub: { color: 'var(--primary)' },
+        date: { color: 'var(--primary)', borderColor: 'var(--secondary)' }
+      };
+  }
+};
+
 interface EventTimeline {
   id: string;
   title: string;
@@ -1401,81 +1455,86 @@ function App() {
                 </div>
 
                 {/* HERO GRAPHIC BANNER */}
-                <div 
-                  className="invite-hero"
-                  style={{
-                    backgroundImage: `url(${getBackgroundImage(activeInvite.type)})`,
-                    backgroundSize: activeInvite.type === 'wedding' ? '100% 100%' : 'cover'
-                  }}
-                >
-                  {activeInvite.type === 'wedding' && <div className="invite-hero-frame"></div>}
-                  
-                  <div className="invite-header-label">INVITATION</div>
-                  
-                  {activeInvite.type === 'wedding' && (
-                    <div className="invite-hero-title">
-                      {activeInvite.details.brideName || 'Bride'}
-                      <span className="invite-conjunction">weds</span>
-                      {activeInvite.details.groomName || 'Groom'}
-                    </div>
-                  )}
+                {(() => {
+                  const heroStyles = getHeroStyles(activeInvite.type);
+                  return (
+                    <div 
+                      className="invite-hero"
+                      style={{
+                        backgroundImage: `url(${getBackgroundImage(activeInvite.type)})`,
+                        backgroundSize: activeInvite.type === 'wedding' ? '100% 100%' : 'cover'
+                      }}
+                    >
+                      {activeInvite.type === 'wedding' && <div className="invite-hero-frame"></div>}
+                      
+                      <div className="invite-header-label" style={heroStyles.label}>INVITATION</div>
+                      
+                      {activeInvite.type === 'wedding' && (
+                        <div className="invite-hero-title" style={heroStyles.title}>
+                          {activeInvite.details.brideName || 'Bride'}
+                          <span className="invite-conjunction" style={heroStyles.conj}>weds</span>
+                          {activeInvite.details.groomName || 'Groom'}
+                        </div>
+                      )}
 
-                  {activeInvite.type === 'party' && (
-                    <div className="invite-hero-title no-cursive" style={{ color: '#fff' }}>
-                      {activeInvite.details.partyHost || 'Party'}
-                      <span className="invite-conjunction no-cursive">INVITES YOU TO</span>
-                      {activeInvite.details.partyTheme || 'Celebration'}
-                    </div>
-                  )}
+                      {activeInvite.type === 'party' && (
+                        <div className="invite-hero-title no-cursive" style={heroStyles.title}>
+                          {activeInvite.details.partyHost || 'Party'}
+                          <span className="invite-conjunction no-cursive" style={heroStyles.conj}>INVITES YOU TO</span>
+                          {activeInvite.details.partyTheme || 'Celebration'}
+                        </div>
+                      )}
 
-                  {activeInvite.type === 'pooja' && (
-                    <div className="invite-hero-title" style={{ color: 'var(--accent)' }}>
-                      {activeInvite.details.poojaName || 'Pooja Invitation'}
-                      <span className="invite-conjunction" style={{ fontSize: '20px' }}>In Devotion of</span>
-                      {activeInvite.details.deityName || 'Lord'}
-                    </div>
-                  )}
+                      {activeInvite.type === 'pooja' && (
+                        <div className="invite-hero-title" style={heroStyles.title}>
+                          {activeInvite.details.poojaName || 'Pooja Invitation'}
+                          <span className="invite-conjunction" style={{ fontSize: '20px', ...heroStyles.conj }}>In Devotion of</span>
+                          {activeInvite.details.deityName || 'Lord'}
+                        </div>
+                      )}
 
-                  {activeInvite.type === 'path' && (
-                    <div className="invite-hero-title" style={{ color: 'var(--accent)' }}>
-                      {activeInvite.details.pathType || 'Path Sahib'}
-                      <span className="invite-conjunction" style={{ fontSize: '20px' }}>Divine Invitation</span>
-                      <span style={{ fontSize: '18px', color: '#fff', fontFamily: 'Cinzel', display: 'block', marginTop: '10px' }}>
-                        {activeInvite.details.paathText}
-                      </span>
-                    </div>
-                  )}
+                      {activeInvite.type === 'path' && (
+                        <div className="invite-hero-title" style={heroStyles.title}>
+                          {activeInvite.details.pathType || 'Path Sahib'}
+                          <span className="invite-conjunction" style={{ fontSize: '20px', ...heroStyles.conj }}>Divine Invitation</span>
+                          <span style={{ fontSize: '18px', fontFamily: 'Cinzel', display: 'block', marginTop: '10px', ...heroStyles.sub }}>
+                            {activeInvite.details.paathText}
+                          </span>
+                        </div>
+                      )}
 
-                  {activeInvite.type === 'public' && (
-                    <div className="invite-hero-title no-cursive" style={{ color: '#fff' }}>
-                      {activeInvite.title}
-                      <span className="invite-conjunction no-cursive" style={{ fontSize: '14px', marginTop: '15px' }}>
-                        Organized by: {activeInvite.details.organizer}
-                      </span>
-                    </div>
-                  )}
+                      {activeInvite.type === 'public' && (
+                        <div className="invite-hero-title no-cursive" style={heroStyles.title}>
+                          {activeInvite.title}
+                          <span className="invite-conjunction no-cursive" style={{ fontSize: '14px', marginTop: '15px', ...heroStyles.conj }}>
+                            Organized by: {activeInvite.details.organizer}
+                          </span>
+                        </div>
+                      )}
 
-                  {activeInvite.type === 'general' && (
-                    <div className="invite-hero-title no-cursive" style={{ color: '#fff' }}>
-                      {activeInvite.details.generalTitle || activeInvite.title}
-                      <span className="invite-conjunction no-cursive">YOU ARE INVITED</span>
-                    </div>
-                  )}
+                      {activeInvite.type === 'general' && (
+                        <div className="invite-hero-title no-cursive" style={heroStyles.title}>
+                          {activeInvite.details.generalTitle || activeInvite.title}
+                          <span className="invite-conjunction no-cursive" style={heroStyles.conj}>YOU ARE INVITED</span>
+                        </div>
+                      )}
 
-                  {activeInvite.type === 'wedding' && (
-                    <img src={weddingCouple} alt="Couple portrait" className="invite-couple-img" />
-                  )}
+                      {activeInvite.type === 'wedding' && (
+                        <img src={weddingCouple} alt="Couple portrait" className="invite-couple-img" />
+                      )}
 
-                  <div className="invite-hero-footer">
-                    <div className="invite-date-badge" style={{ color: activeInvite.type === 'wedding' ? 'var(--primary)' : '#fff' }}>
-                      {activeInvite.date ? new Date(activeInvite.date).toLocaleDateString('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        year: 'numeric'
-                      }) : 'Date TBD'}
+                      <div className="invite-hero-footer">
+                        <div className="invite-date-badge" style={heroStyles.date}>
+                          {activeInvite.date ? new Date(activeInvite.date).toLocaleDateString('en-US', {
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric'
+                          }) : 'Date TBD'}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
+                  );
+                })()}
 
                 {/* COUNTDOWN TIMER */}
                 <div className="invite-section bg-alt">
@@ -1733,81 +1792,86 @@ function App() {
             </div>
 
             {/* HERO GRAPHIC BANNER */}
-            <div 
-              className="invite-hero"
-              style={{
-                backgroundImage: `url(${getBackgroundImage(activeInvite.type)})`,
-                backgroundSize: activeInvite.type === 'wedding' ? '100% 100%' : 'cover'
-              }}
-            >
-              {activeInvite.type === 'wedding' && <div className="invite-hero-frame"></div>}
-              
-              <div className="invite-header-label">INVITATION</div>
-              
-              {activeInvite.type === 'wedding' && (
-                <div className="invite-hero-title">
-                  {activeInvite.details.brideName || 'Bride'}
-                  <span className="invite-conjunction">weds</span>
-                  {activeInvite.details.groomName || 'Groom'}
-                </div>
-              )}
+            {(() => {
+              const heroStyles = getHeroStyles(activeInvite.type);
+              return (
+                <div 
+                  className="invite-hero"
+                  style={{
+                    backgroundImage: `url(${getBackgroundImage(activeInvite.type)})`,
+                    backgroundSize: activeInvite.type === 'wedding' ? '100% 100%' : 'cover'
+                  }}
+                >
+                  {activeInvite.type === 'wedding' && <div className="invite-hero-frame"></div>}
+                  
+                  <div className="invite-header-label" style={heroStyles.label}>INVITATION</div>
+                  
+                  {activeInvite.type === 'wedding' && (
+                    <div className="invite-hero-title" style={heroStyles.title}>
+                      {activeInvite.details.brideName || 'Bride'}
+                      <span className="invite-conjunction" style={heroStyles.conj}>weds</span>
+                      {activeInvite.details.groomName || 'Groom'}
+                    </div>
+                  )}
 
-              {activeInvite.type === 'party' && (
-                <div className="invite-hero-title no-cursive" style={{ color: '#fff' }}>
-                  {activeInvite.details.partyHost || 'Party'}
-                  <span className="invite-conjunction no-cursive">INVITES YOU TO</span>
-                  {activeInvite.details.partyTheme || 'Celebration'}
-                </div>
-              )}
+                  {activeInvite.type === 'party' && (
+                    <div className="invite-hero-title no-cursive" style={heroStyles.title}>
+                      {activeInvite.details.partyHost || 'Party'}
+                      <span className="invite-conjunction no-cursive" style={heroStyles.conj}>INVITES YOU TO</span>
+                      {activeInvite.details.partyTheme || 'Celebration'}
+                    </div>
+                  )}
 
-              {activeInvite.type === 'pooja' && (
-                <div className="invite-hero-title" style={{ color: 'var(--accent)' }}>
-                  {activeInvite.details.poojaName || 'Pooja Invitation'}
-                  <span className="invite-conjunction" style={{ fontSize: '20px' }}>In Devotion of</span>
-                  {activeInvite.details.deityName || 'Lord'}
-                </div>
-              )}
+                  {activeInvite.type === 'pooja' && (
+                    <div className="invite-hero-title" style={heroStyles.title}>
+                      {activeInvite.details.poojaName || 'Pooja Invitation'}
+                      <span className="invite-conjunction" style={{ fontSize: '20px', ...heroStyles.conj }}>In Devotion of</span>
+                      {activeInvite.details.deityName || 'Lord'}
+                    </div>
+                  )}
 
-              {activeInvite.type === 'path' && (
-                <div className="invite-hero-title" style={{ color: 'var(--accent)' }}>
-                  {activeInvite.details.pathType || 'Path Sahib'}
-                  <span className="invite-conjunction" style={{ fontSize: '20px' }}>Divine Invitation</span>
-                  <span style={{ fontSize: '18px', color: '#fff', fontFamily: 'Cinzel', display: 'block', marginTop: '10px' }}>
-                    {activeInvite.details.paathText}
-                  </span>
-                </div>
-              )}
+                  {activeInvite.type === 'path' && (
+                    <div className="invite-hero-title" style={heroStyles.title}>
+                      {activeInvite.details.pathType || 'Path Sahib'}
+                      <span className="invite-conjunction" style={{ fontSize: '20px', ...heroStyles.conj }}>Divine Invitation</span>
+                      <span style={{ fontSize: '18px', fontFamily: 'Cinzel', display: 'block', marginTop: '10px', ...heroStyles.sub }}>
+                        {activeInvite.details.paathText}
+                      </span>
+                    </div>
+                  )}
 
-              {activeInvite.type === 'public' && (
-                <div className="invite-hero-title no-cursive" style={{ color: '#fff' }}>
-                  {activeInvite.title}
-                  <span className="invite-conjunction no-cursive" style={{ fontSize: '14px', marginTop: '15px' }}>
-                    Organized by: {activeInvite.details.organizer}
-                  </span>
-                </div>
-              )}
+                  {activeInvite.type === 'public' && (
+                    <div className="invite-hero-title no-cursive" style={heroStyles.title}>
+                      {activeInvite.title}
+                      <span className="invite-conjunction no-cursive" style={{ fontSize: '14px', marginTop: '15px', ...heroStyles.conj }}>
+                        Organized by: {activeInvite.details.organizer}
+                      </span>
+                    </div>
+                  )}
 
-              {activeInvite.type === 'general' && (
-                <div className="invite-hero-title no-cursive" style={{ color: '#fff' }}>
-                  {activeInvite.details.generalTitle || activeInvite.title}
-                  <span className="invite-conjunction no-cursive">YOU ARE INVITED</span>
-                </div>
-              )}
+                  {activeInvite.type === 'general' && (
+                    <div className="invite-hero-title no-cursive" style={heroStyles.title}>
+                      {activeInvite.details.generalTitle || activeInvite.title}
+                      <span className="invite-conjunction no-cursive" style={heroStyles.conj}>YOU ARE INVITED</span>
+                    </div>
+                  )}
 
-              {activeInvite.type === 'wedding' && (
-                <img src={weddingCouple} alt="Couple portrait" className="invite-couple-img" />
-              )}
+                  {activeInvite.type === 'wedding' && (
+                    <img src={weddingCouple} alt="Couple portrait" className="invite-couple-img" />
+                  )}
 
-              <div className="invite-hero-footer">
-                <div className="invite-date-badge" style={{ color: activeInvite.type === 'wedding' ? 'var(--primary)' : '#fff' }}>
-                  {activeInvite.date ? new Date(activeInvite.date).toLocaleDateString('en-US', {
-                    month: 'short',
-                    day: 'numeric',
-                    year: 'numeric'
-                  }) : 'Date TBD'}
+                  <div className="invite-hero-footer">
+                    <div className="invite-date-badge" style={heroStyles.date}>
+                      {activeInvite.date ? new Date(activeInvite.date).toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric'
+                      }) : 'Date TBD'}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
+              );
+            })()}
 
             {/* COUNTDOWN TIMER */}
             <div className="invite-section bg-alt">
